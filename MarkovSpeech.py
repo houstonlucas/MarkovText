@@ -20,12 +20,14 @@ class MarkovSpeech:
         while index < l:
             special = None
             end = corpus.find(' ', index)
+            if end == -1:
+                end = l
             section = corpus[index:end+1]
 
             for char in special_chars:
                 if char in section:
                     special = char
-                    continue
+                    break
 
             if special is not None:
                 tokens = self.extract_tokens(section, special)
@@ -67,7 +69,6 @@ class MarkovSpeech:
             for following in self.pair_counts[preceding]:
                 if following in self.word_counts:
                     self.pair_counts[preceding][following] /= float(self.word_counts[following])
-
 
 
 if __name__ == "__main__":
