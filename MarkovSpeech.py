@@ -57,12 +57,13 @@ class MarkovSpeech:
         if word1 not in self.pair_counts:
             self.pair_counts[word1] = {}
 
-        if word2 in pair_counts[word1]:
-            pair_counts[word1][word2] += 1
+        if word2 in self.pair_counts[word1]:
+            self.pair_counts[word1][word2] += 1
         else:
-            pair_counts[word1][word2] = 1
+            self.pair_counts[word1][word2] = 1
 
     def normalize_pair_count(self):
+        pass
         
 
 
