@@ -14,7 +14,7 @@ class MarkovSpeech:
         pass
 
     def update_pair_count(self, word1, word2):
-        if word1 in word_counts:
+        if word1 in self.word_counts:
             self.word_counts[word1] += 1
         else:
             self.word_counts[word1] = 1
