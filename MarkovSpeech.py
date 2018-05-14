@@ -1,5 +1,10 @@
 import numpy as np
+import pickle
 
+
+# Load object
+# with open('backup.pickle', 'rb') as handle:
+#     ms = pickle.load(handle)
 
 def main():
     ms = MarkovSpeech()
@@ -67,6 +72,10 @@ class MarkovSpeech:
             for following in self.pair_counts[preceding]:
                 if following in self.word_counts:
                     self.pair_counts[preceding][following] /= float(self.word_counts[following])
+
+    def backup(self):
+        with open('backup.pickle', 'wb') as handle:
+            pickle.dump(self, handle)
 
 
 
