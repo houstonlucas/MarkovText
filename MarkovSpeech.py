@@ -9,6 +9,13 @@ import pickle
 def main():
     ms = MarkovSpeech()
 
+    with open("corpus_lotr", 'r') as f:
+        text = f.read()
+    ms.count_corpus(text)
+    ms.normalize_pair_count()
+    text = ms.generate_text(8)
+    print(text)
+
 
 class MarkovSpeech:
     def __init__(self):
@@ -72,12 +79,28 @@ class MarkovSpeech:
     def normalize_pair_count(self):
         for preceding in self.pair_counts:
             for following in self.pair_counts[preceding]:
-                if following in self.word_counts:
-                    self.pair_counts[preceding][following] /= float(self.word_counts[following])
+                self.pair_counts[preceding][following] /= float(self.word_counts[preceding])
 
     def backup(self):
         with open('backup.pickle', 'wb') as handle:
             pickle.dump(self, handle)
+
+    def generate_text(self, num_sentences):
+        text = ""
+        previous = "."
+        for i in range(num_sentences):
+            sentence = ""
+            start = True
+            while start or not previous in ".;?!":
+                start = False
+                next_words, probs = zip(*self.pair_counts[previous].items())
+                next_word = np.random.choice(next_words, p=probs)
+                previous = next_word
+
+                filler = "" if next_word in ".,;?!" else " "
+                sentence += filler + next_word
+            text += sentence + "\n"
+        return text
 
 
 if __name__ == "__main__":
